@@ -1,6 +1,7 @@
 #CRIAR O DATABASE
 create database db_controle_jogos_bb;
 
+#ATIVA O DATABASE
 use db_controle_jogos_bb;
 
 create table tbl_jogo (
@@ -18,4 +19,3 @@ create table tbl_jogo (
 show tables;
 desc tbl_jogo;
 select * from tbl_jogo;
-

@@ -24,13 +24,13 @@ const insertJogo = async function(jogo){
                                         link
 
                                     ) values (
-                                        ${jogo.nome},
-                                        ${jogo.data_lancamento},
-                                        ${jogo.versao},
-                                        ${jogo.tamanho},
-                                        ${jogo.descricao},
-                                        ${jogo.foto_capa},
-                                        ${jogo.link},
+                                        '${jogo.nome}',
+                                        '${jogo.data_lancamento}',
+                                        '${jogo.versao}',
+                                        '${jogo.tamanho}',
+                                        '${jogo.descricao}',
+                                        '${jogo.foto_capa}',
+                                        '${jogo.link}'
                                     )`
     //Executa o script SQL no BD e aguarda o retorno no BD
     let result = await prisma.$executeRawUnsafe(sql)
@@ -66,7 +66,7 @@ const selectByIdJogo = async function(){
 
 }
 
-module.export = {
+module.exports = {
     insertJogo,
     updateJogo,
     deleteJogo,
