@@ -90,7 +90,7 @@ const listarJogo = async function(){
 }
 
 //Função para buscar um jogo pelo ID
-const buscarJogo = async function(jogo){
+const buscarJogo = async function(idJogo){
 
     try{
 

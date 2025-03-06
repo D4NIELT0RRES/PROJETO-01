@@ -79,9 +79,11 @@ app.get('/v1/controle-jogos/jogo', cors(), async function (request, response) {
     response.json(resultJogo)
 })
 
-app.get('/v1/controle-jogos/jogo', cors(), async function (request, response) {
+//EndPoint para retornar um jogo pelo ID
+app.get('/v1/controle-jogos/jogo/:id', cors(), async function (request, response) {
     
-    let resultJogo = await controllerJogo.buscarJogo()
+    let idJogo = request.params.id
+    let resultJogo = await controllerJogo.buscarJogo(idJogo)
 
     response.status(resultJogo.status_code)
     response.json(resultJogo)
