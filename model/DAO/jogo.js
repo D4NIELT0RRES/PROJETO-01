@@ -78,11 +78,11 @@ const deleteJogo = async function(jogo){
 }
 
 //Função para retornar do Banco de dados uma lista de jogos
-const selectAllJogo = async function(idJogo){
+const selectAllJogo = async function(){
 
     try{
         //Script SQL para retornar os dados do BD
-        let sql = `select * from tbl_jogo ${idJogo}`
+        let sql = `select * from tbl_jogo`
 
         //Executa o script SQL e aguarda o retorno dos dados
         let result = await prisma.$queryRawUnsafe(sql)

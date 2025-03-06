@@ -52,8 +52,28 @@ const atualizarJogo = async function(){
 }
 
 //Função para excluir um jogo 
-const excluirJogo = async function(){
+const excluirJogo = async function(jogo){
 
+    try{
+        let idJogo = jogo
+
+        let dadosJogos = {}
+
+        //Chama a função para retornar os dados do jogo
+        let resultJogo = await jogoDAO.deleteJogo(idJogo)
+
+        if(idJogo != ''){
+            
+            if(resultJogo !== String(resultJogo)){
+                
+                if(resultJogo != false || typeof(resultJogo) == 'object'){
+                    
+                }
+            }
+        }
+    }catch{
+        return MESSAGE.ERROR_INTERNAL_SERVER_CONTROLLER//500
+    }
 
 }
 

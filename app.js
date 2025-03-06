@@ -90,6 +90,16 @@ app.get('/v1/controle-jogos/jogo/:id', cors(), async function (request, response
 
 })
 
+//EndPoint para deletar um jogo pelo ID
+app.delete('/v1/controle-jogos/jogo/delete/:id', cors(), async function (request, response) {
+    
+    let idJogo = request.params.id
+    let resultJogo = await controllerJogo.excluirJogo(idJogo)
+
+    response.status(resultJogo.status_code)
+    response.json(resultJogo)
+})
+
 
 
 app.listen('8080', function(){

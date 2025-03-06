@@ -17,6 +17,8 @@ const ERROR_NOT_FOUND                  = {status: false, status_code:404, messag
 /**********************MENSAGENS DE SUCESSO***********************/
 
 const SUCCESS_CREATED_ITEM = {status: true, status_code:201, message:'Item criado com sucesso'}
+const SUCCESS_DELETE_ITEM = {status: true, status_code:200, message:'Item removido com sucesso'}
+
 
 
 
@@ -28,5 +30,6 @@ module.exports = {
     ERROR_INTERNAL_SERVER_MODEL,
     ERROR_CONTENT_TYPE,
     ERROR_NOT_FOUND,
-    SUCCESS_CREATED_ITEM
+    SUCCESS_CREATED_ITEM,
+    SUCCESS_DELETE_ITEM
 }
