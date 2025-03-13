@@ -91,7 +91,7 @@ app.get('/v1/controle-jogos/jogo/:id', cors(), async function (request, response
 })
 
 //EndPoint para deletar um jogo pelo ID
-app.delete('/v1/controle-jogos/jogo/delete/:id', cors(), async function (request, response) {
+app.delete('/v1/controle-jogos/jogo/:id', cors(), async function (request, response) {
     
     let idJogo = request.params.id
     let resultJogo = await controllerJogo.excluirJogo(idJogo)
@@ -100,6 +100,21 @@ app.delete('/v1/controle-jogos/jogo/delete/:id', cors(), async function (request
     response.json(resultJogo)
 })
 
+app.put('/v1/controle-jogos/jogo/:id', cors(), bodyParserJson, async function (request, response){
+
+    //Recebe o content-type para válidar o tipo de dados da requisição
+    let contentType = request.headers['content-type']
+    //Recebe o ID do jogo
+    let idJogo = request.params.id
+    //Recebe os dados do Jogo encaminhado no BODY da requisição
+    let dadosBody = request.body
+    
+    //Encaminhando os dados do body da requisição para a Controller inserir no banco de dados
+    let resultJogo = await controllerJogo.atualizarJogo(dadosBody,idJogo,contentType)
+    
+    response.status(resultJogo.status_code)
+    response.json(resultJogo)
+})
 
 
 app.listen('8080', function(){

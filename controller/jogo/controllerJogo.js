@@ -10,6 +10,7 @@ const MESSAGE = require('../../modulo/config.js')
 
 //Import do DAO para realizar um CRUD no banco de dados
 const jogoDAO = require('../../model/DAO/jogo.js')
+const { deserializeRawResult } = require('@prisma/client/runtime/library')
 
 //Função para inserir um novo jogo
 const inserirJogo = async function(jogo,contentType){
@@ -17,9 +18,9 @@ const inserirJogo = async function(jogo,contentType){
     try{
         if(contentType == 'application/json'){
 
-            if( jogo.nome            == undefined ||            jogo.nome            == ''  ||            jogo.nome            == null || jogo.nome.length   > 80 ||
-                jogo.data_lancamento == undefined ||            jogo.data_lancamento == ''  ||            jogo.data_lancamento == null || jogo.nome.length   > 10 ||
-                jogo.versao          == undefined ||            jogo.versao          == ''  ||            jogo.versao          == null || jogo.versao.length > 10 ||
+            if( jogo.nome            == undefined ||            jogo.nome            == ''  ||            jogo.nome            == null || jogo.nome.length              > 80 ||
+                jogo.data_lancamento == undefined ||            jogo.data_lancamento == ''  ||            jogo.data_lancamento == null || jogo.data_lancamento.length   > 10 ||
+                jogo.versao          == undefined ||            jogo.versao          == ''  ||            jogo.versao          == null || jogo.versao.length            > 10 ||
                 jogo.tamanho         == undefined ||            jogo.tamanho.length   > 10  ||
                 jogo.descricao       == undefined ||
                 jogo.foto_capa       == undefined ||            jogo.foto_capa.length > 200 ||
@@ -46,33 +47,77 @@ const inserirJogo = async function(jogo,contentType){
 }
 
 //Função para atualizar um jogo
-const atualizarJogo = async function(){
+const atualizarJogo = async function(jogo,id,contentType){
 
+    try{
+        if(contentType == 'application/json'){
+
+            if( jogo.nome            == undefined ||            jogo.nome            == ''  ||            jogo.nome            == null || jogo.nome.length              > 80 ||
+                jogo.data_lancamento == undefined ||            jogo.data_lancamento == ''  ||            jogo.data_lancamento == null || jogo.data_lancamento.length   > 10 ||
+                jogo.versao          == undefined ||            jogo.versao          == ''  ||            jogo.versao          == null || jogo.versao.length            > 10 ||
+                jogo.tamanho         == undefined ||            jogo.tamanho.length   > 10  ||
+                jogo.descricao       == undefined ||
+                jogo.foto_capa       == undefined ||            jogo.foto_capa.length > 200 ||
+                jogo.link            == undefined ||            jogo.link.length      > 200 ||
+                id                   == undefined ||            id == ''  || id == null || isNaN(id) || id<= 0
+            ){
+                return MESSAGE.ERROR_REQUIRED_FIELDS //400
+            }else{
+                //Validar se o ID existe no BD
+                let resultJogo = await buscarJogo(parseInt(id))
+                if(resultJogo.status_code == 200){
+                    //Update
+                    //Adiciona um atributo id no JSON
+                    jogo.id = parseInt(id)
+                    let result = await jogoDAO.updateJogo(jogo)
+
+                    if(result){
+                        return MESSAGE.SUCCESS_UPDATE_ITEM//200
+                    }else{
+                        return MESSAGE.ERROR_INTERNAL_SERVER_MODEL//500
+                    }
+                }else if(resultJogo.status_code == 404){
+                    return MESSAGE.ERROR_NOT_FOUND//404
+                }else{
+                    return MESSAGE.ERROR_INTERNAL_SERVER_CONTROLLER//500
+                }
+            }
+        }else{
+            return MESSAGE.ERROR_CONTENT_TYPE//415
+        }
+    }catch(error){
+        console.log(error)
+        return MESSAGE.ERROR_INTERNAL_SERVER_CONTROLLER//500
+    }
 
 }
 
 //Função para excluir um jogo 
-const excluirJogo = async function(jogo){
+const excluirJogo = async function(id){
 
     try{
-        let idJogo = jogo
-
-        let dadosJogos = {}
-
-        //Chama a função para retornar os dados do jogo
-        let resultJogo = await jogoDAO.deleteJogo(idJogo)
-
-        if(idJogo != ''){
+        if(id == "" || id == undefined || id == null || isNaN(id) || id <= 0){
+            return MESSAGE.ERROR_REQUIRED_FIELDS//400
+        }else{
+            let resultJogo = await buscarJogo(parseInt(id))
             
-            if(resultJogo !== String(resultJogo)){
-                
-                if(resultJogo != false || typeof(resultJogo) == 'object'){
-                    
+            if(resultJogo.status_code == 200){
+                //Delete
+                let result = await jogoDAO.deleteJogo(parseInt(id))
+
+                if(result){
+                    return MESSAGE.SUCCESS_DELETE_ITEM//200
+                }else{
+                    return MESSAGE.ERROR_INTERNAL_SERVER_MODEL//500
                 }
+            }else if(resultJogo.status_code == 404){
+                return MESSAGE.ERROR_NOT_FOUND//404
+            }else{
+                return MESSAGE.ERROR_INTERNAL_SERVER_CONTROLLER//500
             }
         }
-    }catch{
-        return MESSAGE.ERROR_INTERNAL_SERVER_CONTROLLER//500
+    }catch(error){
+        return MESSAGE.ERROR_INTERNAL_SERVER_CONTROLLER//500 
     }
 
 }
@@ -110,34 +155,37 @@ const listarJogo = async function(){
 }
 
 //Função para buscar um jogo pelo ID
-const buscarJogo = async function(idJogo){
+const buscarJogo = async function(id){
 
     try{
 
-        let jogo = idJogo
-        let dadosJogos = {}
-        //Chama a função para retornar os dados do jogo
-        let resultJogo = await jogoDAO.selectByIdJogo(jogo)
-        if(resultJogo != false || typeof(resultJogo) == 'object'){
-            if(resultJogo.length > 0){
-
-                //Cria um objeto do tipo JSON para retornar a lista de jogos
-                dadosJogos.status = true
-                dadosJogos.status_code = 200
-                dadosJogos.items = resultJogo.length
-                dadosJogos.games = resultJogo
-                dadosJogos.id = jogo
-
-                return dadosJogos//200
-            }else{
-                return MESSAGE.ERROR_NOT_FOUND//400
-            }
+        if(id == "" || id == undefined || id == null || isNaN(id) || id <= 0){
+            return MESSAGE.ERROR_REQUIRED_FIELDS//400
         }else{
-            return MESSAGE.ERROR_INTERNAL_SERVER_MODEL//500
-        }
-        
+
+            let dadosJogos = {}
+
+            //Chama a função para retornar os dados do jogo
+            let resultJogo = await jogoDAO.selectByIdJogo(parseInt(id))
+
+            if(resultJogo != false || typeof(resultJogo) == 'object'){
+                if(resultJogo.length > 0){
+
+                    //Cria um objeto do tipo JSON para retornar a lista de jogos
+                    dadosJogos.status = true
+                    dadosJogos.status_code = 200
+                    dadosJogos.games = resultJogo
+
+                    return dadosJogos//200
+                }else{
+                    return MESSAGE.ERROR_NOT_FOUND//404
+                }
+            }else{
+                return MESSAGE.ERROR_INTERNAL_SERVER_MODEL//500
+            }
+        } 
     }catch(error){
-        return MESSAGE.ERROR_INTERNAL_SERVER_CONTROLLER
+        return MESSAGE.ERROR_INTERNAL_SERVER_CONTROLLER//500
     }
 
 }
