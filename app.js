@@ -35,6 +35,7 @@ const bodyParser = require('body-parser')
 
 //Importe das controles para realizar o CRUD de dados
 const controllerJogo = require('./controller/jogo/controllerJogo.js')
+const controllerEmpresa = require('./controller/jogo/controllerEmpresa.js')
 
 //Estabelecendo o formato de dados que deverá chegar no body da aquisição (POST ou PUT)
 const bodyParserJson = bodyParser.json()
@@ -114,6 +115,60 @@ app.put('/v1/controle-jogos/jogo/:id', cors(), bodyParserJson, async function (r
     
     response.status(resultJogo.status_code)
     response.json(resultJogo)
+})
+
+//EndPoint para inserir uma empresa no banco de dados
+app.post('/v1/controle-jogos/empresa', cors(), bodyParserJson, async function (request, response) {
+    
+    //Recebe o content-type para válidar o tipo de dados de requisição
+    let contentType = request.headers['content-type']
+
+    //Recebe o conteúdo do BODY da requisição
+    let dadosBody = request.body
+
+    //Encaminhando os dados do body da requisição para a controller inserir no banco de dados
+    let resultEmpresa = await controllerEmpresa.inserirEmpresa(dadosBody, contentType)
+
+    response.status(resultEmpresa.status_code)
+    response.json(resultEmpresa)
+})
+
+//EndPoint para retornar uma lista de empresas
+app.get('/v1/controle-jogos/empresa', cors(), async function (request, response) {
+    
+    //Chama a função para lista de empresa
+    let resultEmpresa = await controllerEmpresa.listarEmpresa()
+
+    response.status(resultEmpresa.status_code)
+    response.json(resultEmpresa)
+})
+
+//EndPoint para retornar uma empresa pelo ID
+app.get('/v1/controle-jogos/empresa/:id', cors(), async function (request, response) {
+    
+    let idEmpresa = request.params.id
+    //Chama a função para retornar uma empresa pelo ID
+    let resultEmpresa = await controllerEmpresa.buscarEmpresa(idEmpresa)
+
+    response.status(resultEmpresa.status_code)
+    response.json(resultEmpresa)
+})
+
+//EndPoint para deletar uma empresa pelo ID
+app.delete('/v1/controle-jogos/empresa/:id', cors(), bodyParserJson, async function (request, response) {
+    //Recebe o contentType da requisição
+    let contentType = request.headers['content-type']
+
+    //Recebe o id da Empresa
+    let idEmpresa = request.params.id
+
+    //Recebe os dados do jogo encaminhados do BODY
+    let dadosBody = request.body
+
+    let resultEmpresa = await controllerEmpresa.excluirEmpresa(dadosBody,idEmpresa,contentType)
+
+    response.status(resultEmpresa.status_code)
+    response.json(resultEmpresa)
 })
 
 
