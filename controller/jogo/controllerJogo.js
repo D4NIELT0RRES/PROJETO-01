@@ -86,7 +86,6 @@ const atualizarJogo = async function(jogo,id,contentType){
             return MESSAGE.ERROR_CONTENT_TYPE//415
         }
     }catch(error){
-        console.log(error)
         return MESSAGE.ERROR_INTERNAL_SERVER_CONTROLLER//500
     }
 
