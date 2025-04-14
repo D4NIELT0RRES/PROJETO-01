@@ -9,7 +9,7 @@
 const MESSAGE = require('../../modulo/config')
 
 //Import do DAO para realizar um CRUD no banco de dados
-const EmpresaDAO = require('../../model/DAO/empresa.js')
+const empresaDAO = require('../../model/DAO/empresa.js')
 const { deserializeRawResult } = require('@prisma/client/runtime/library')
 
 //Função para inserir uma nova empresa
@@ -28,7 +28,7 @@ const inserirEmpresa = async function (empresa,contentType) {
                 return MESSAGE.ERROR_REQUIRED_FIELDS //400
             }else{
                 //Encaminha os dados na nova empresa para ser inserida do Banco de Dados
-                let resultEmpresa = await EmpresaDAO.insertEmpresa(empresa)
+                let resultEmpresa = await empresampresaDAO.insertEmpresa(empresa)
 
                 if(resultEmpresa){
                     return MESSAGE.SUCCESS_CREATED_ITEM //201
@@ -68,7 +68,7 @@ const atualizarEmpresa = async function (empresa, id, contentType) {
                     
                     //Adiciona um atributo id no JSON
                     empresa.id = parseInt(id)
-                    let result = await EmpresaDAO.updateEmpresa(empresa)
+                    let result = await empresaDAO.updateEmpresa(empresa)
 
                     if(result){
                         return MESSAGE.SUCCESS_UPDATE_ITEM //200
@@ -100,7 +100,7 @@ const excluirEmpresa = async function (id) {
 
             if(resultJogo.status_code == 200){
                 //delete
-                let result = await EmpresaDAO.deleteEmpresa(parseInt(id))
+                let result = await empresaDAO.deleteEmpresa(parseInt(id))
 
                 if(result){
                     return MESSAGE.SUCCESS_DELETE_ITEM//200
@@ -126,7 +126,7 @@ const listarEmpresa = async function () {
         let dadosEmpresa = {}
 
         //Chama função para retornar os dados da empresa
-        let resultEmpresa = await EmpresaDAO.selectAllEmpresa()
+        let resultEmpresa = await empresaDAO.selectAllEmpresa()
         if(resultEmpresa != false || typeof(resultEmpresa) == 'object'){
             if(resultEmpresa.length > 0){
 
@@ -158,7 +158,7 @@ const buscarEmpresa = async function (id){
             let dadosEmpresa = {}
 
             //Chama a função para retornar os dados da empresa
-            let resultEmpresa = await EmpresaDAO.selectByIdEmpresa(parseInt(id))
+            let resultEmpresa = await empresaDAO.selectByIdEmpresa(parseInt(id))
 
             if(resultEmpresa != false || typeof(resultEmpresa) == 'object'){
                 if(resultEmpresa.length > 0){

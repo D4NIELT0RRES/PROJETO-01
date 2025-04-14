@@ -117,6 +117,8 @@ app.put('/v1/controle-jogos/jogo/:id', cors(), bodyParserJson, async function (r
     response.json(resultJogo)
 })
 
+//////////////////////////  TBL_EMPRESA //////////////////////////
+
 //EndPoint para inserir uma empresa no banco de dados
 app.post('/v1/controle-jogos/empresa', cors(), bodyParserJson, async function (request, response) {
     
@@ -170,6 +172,9 @@ app.delete('/v1/controle-jogos/empresa/:id', cors(), bodyParserJson, async funct
     response.status(resultEmpresa.status_code)
     response.json(resultEmpresa)
 })
+
+////////////////////////// TBL_ VERSAO //////////////////////////
+
 
 
 app.listen('8080', function(){

@@ -48,11 +48,11 @@ const updateEmpresa = async function (empresa) {
     
     try{
         let sql = `update tbl_empresa set   nome            = '${empresa.nome}',
-                                            descricao       = ${empresa.descricao},
-                                            tipo_de_empresa = ${empresa.tipo_de_empresa},
-                                            fundador        = ${empresa.fundador},
-                                            pais_origem     = ${empresa.pais_origem},
-                                            foto_capa       = ${empresa.foto_capa} `
+                                            descricao       = '${empresa.descricao}',
+                                            tipo_de_empresa = '${empresa.tipo_de_empresa}',
+                                            fundador        = '${empresa.fundador}',
+                                            pais_origem     = '${empresa.pais_origem}',
+                                            foto_capa       = '${empresa.foto_capa}'`
 
         //Executa o script SQL no BD e aguarda o retorno no BD
         let result = await prisma.$executeRawUnsafe(sql)
