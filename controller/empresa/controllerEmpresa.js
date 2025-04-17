@@ -28,7 +28,7 @@ const inserirEmpresa = async function (empresa,contentType) {
                 return MESSAGE.ERROR_REQUIRED_FIELDS //400
             }else{
                 //Encaminha os dados na nova empresa para ser inserida do Banco de Dados
-                let resultEmpresa = await empresampresaDAO.insertEmpresa(empresa)
+                let resultEmpresa = await empresaDAO.insertEmpresa(empresa)
 
                 if(resultEmpresa){
                     return MESSAGE.SUCCESS_CREATED_ITEM //201
@@ -41,6 +41,7 @@ const inserirEmpresa = async function (empresa,contentType) {
             return MESSAGE.ERROR_CONTENT_TYPE //415
         }
     }catch(error){
+
         return MESSAGE.ERROR_INTERNAL_SERVER_CONTROLLER //500
     }
 }
@@ -96,7 +97,7 @@ const excluirEmpresa = async function (id) {
         if(id == undefined || id == '' || id == null || isNaN(id) || id <= 0){
             return MESSAGE.ERROR_REQUIRED_FIELDS //400
         }else{
-            let resultEmpresa = await buscarEmpresa([parseInt(id)])
+            let resultEmpresa = await buscarEmpresa(parseInt(id))
 
             if(resultJogo.status_code == 200){
                 //delete
@@ -148,7 +149,7 @@ const listarEmpresa = async function () {
     }
 }
 
-//
+//Função para buscar uma empresa pelo ID
 const buscarEmpresa = async function (id){
     
     try {
@@ -172,9 +173,9 @@ const buscarEmpresa = async function (id){
                 }else{
                     return MESSAGE.ERROR_NOT_FOUND//404
                 }
-        }else{
+            }else{
             return MESSAGE.ERROR_INTERNAL_SERVER_MODEL//500
-        }
+            }
         }
     } catch(error) {
         return MESSAGE.ERROR_INTERNAL_SERVER_CONTROLLER//500

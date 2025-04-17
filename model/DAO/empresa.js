@@ -16,19 +16,19 @@ const insertEmpresa = async function (empresa) {
     try{
 
         let sql = `insert into tbl_empresa(
-                                            nome
-                                            descricao
-                                            tipo_de_empresa
-                                            fundador
-                                            pais_origem
-                                            foto_capa
+                                            nome,
+                                            descricao,
+                                            tipo_de_empresa,
+                                            fundador,
+                                            pais_origem,
+                                            foto_capa_empresa
                                           ) values (
                                             '${empresa.nome}',
                                             '${empresa.descricao}',
                                             '${empresa.tipo_de_empresa}',
                                             '${empresa.fundador}',
-                                            '${empresa.pais_origem},
-                                            '${empresa.foto_capa}, 
+                                            '${empresa.pais_origem}',
+                                            '${empresa.foto_capa_empresa}'
                                           )`
         //Executa o script SQL no BD e aguarda o retorno no BD
         let result = await prisma.$executeRawUnsafe(sql)
@@ -39,6 +39,7 @@ const insertEmpresa = async function (empresa) {
             return false
         }    
     }catch(error){
+        console.log(error)
         return false    
     }
 }
