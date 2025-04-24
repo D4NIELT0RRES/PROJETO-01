@@ -17,10 +17,10 @@ const inserirGenero = async function (genero, contentType) {
     try {
         if(contentType == 'application/json'){
 
-            if( genero.nome == undefined || 
-                genero.nome == '' || 
-                genero.nome == null || 
-                genero.nome.length > 45 
+            if( genero.tipo_de_categoria == undefined || 
+                genero.tipo_de_categoria == '' || 
+                genero.tipo_de_categoria == null || 
+                genero.tipo_de_categoria.length > 45 
                 
             ){
                 return MESSAGE.ERROR_REQUIRED_FIELDS//400
@@ -50,10 +50,10 @@ const atualizarGenero = async function (genero,id,contentType) {
         
         if(contentType == 'application/json'){
 
-            if( genero.nome == undefined || 
-                genero.nome == '' || 
-                genero.nome == null || 
-                genero.nome.length > 45 ||
+            if( genero.tipo_de_categoria == undefined || 
+                genero.tipo_de_categoria == '' || 
+                genero.tipo_de_categoria == null || 
+                genero.tipo_de_categoria.length > 45 ||
                 id == undefined || id == '' || id == null || isNaN(id) || id <= 0
             ){
                 return MESSAGE.ERROR_REQUIRED_FIELDS //400
@@ -63,7 +63,7 @@ const atualizarGenero = async function (genero,id,contentType) {
                 if(resultGenero.status_code == 200){
                                    
                     //Adiciona um atributo id no JSON
-                    empresa.id = parseInt(id)
+                    genero.id = parseInt(id)
                     let result = await generoDAO.updateGenero(genero)
                
                     if(result){
@@ -89,6 +89,7 @@ const atualizarGenero = async function (genero,id,contentType) {
 const excluirGenero = async function (id) {
     try {
         if(id == undefined || id == '' || id == null || isNaN(id) || id <= 0){
+            
             return MESSAGE.ERROR_REQUIRED_FIELDS //400
         }else{
             let resultGenero = await buscarGenero(parseInt(id))
@@ -124,13 +125,13 @@ const listarGenero = async function () {
         if(resultGenero != false || typeof(resultGenero) == 'object'){
             if(resultGenero.length > 0){
 
-                //Cria um objeto do tipo JSON para retornar a lista de jogos
+                //Cria um objeto do tipo JSON para retornar a lista de generos
                 dadosGenero.status = true
                 dadosGenero.status_code = 200
-                dadosGenero.tipo_de_empresa = resultGenero.length
+                dadosGenero.tipo_de_categoria = resultGenero.length
                 dadosGenero.games = resultGenero
 
-                return dadosEmpresa //200
+                return dadosGenero //200
             }else{
                 return MESSAGE.ERROR_NOT_FOUND//400
             }
@@ -138,6 +139,7 @@ const listarGenero = async function () {
             return MESSAGE.ERROR_INTERNAL_SERVER_MODEL//500
         }
     } catch (error) {
+        
         return MESSAGE.ERROR_INTERNAL_SERVER_CONTROLLER//500
     }
 }
@@ -158,7 +160,7 @@ const buscarGenero = async function (id) {
                     //Cria um objeto do tipo JSON para retornar a lista de jogos
                     dadosGenero.status = true
                     dadosGenero.status_code = 200
-                    dadosGenero.games = resultEmpresa  
+                    dadosGenero.games = resultGenero  
 
                     return dadosGenero//200
                 }else{

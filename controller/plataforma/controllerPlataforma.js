@@ -27,7 +27,7 @@ const inserirPlataforma = async function (plataforma, contentType){
                 //Encaminha os dados na nova plataforma para ser inserido no banco de dados
                 let resultPlataforma = await plataformaDAO.insertPlataforma(plataforma)
 
-                if(resultJogo){
+                if(resultPlataforma){
                     return MESSAGE.SUCCESS_CREATED_ITEM //201
                 }else{
                     return MESSAGE.ERROR_INTERNAL_SERVER_MODEL //500

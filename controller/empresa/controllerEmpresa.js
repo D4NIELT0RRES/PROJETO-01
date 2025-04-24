@@ -122,7 +122,7 @@ const excluirEmpresa = async function(id) {
 const listarEmpresa = async function () {
     
     try{
-
+        
         let dadosEmpresa = {}
 
         //Chama função para retornar os dados da empresa

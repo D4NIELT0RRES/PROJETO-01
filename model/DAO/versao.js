@@ -17,9 +17,9 @@ const insertVersao = async function (versao) {
     try {
         
         let sql = `insert into tbl_versao(
-                                          nome_versao
-                                          numero_versao
-                                          data_versao
+                                          nome_versao,
+                                          numero_versao,
+                                          data_versao,
                                           tamanho
                                           ) values (
                                            '${versao.nome_versao}',
@@ -36,6 +36,7 @@ const insertVersao = async function (versao) {
             return false
         }
     } catch (error) {
+        console.log(error)
         return false
     }
 }
@@ -88,7 +89,7 @@ const selectAllVersao = async function () {
         let sql = `select * from tbl_versao`
 
         //Executa o script SQL e aguarda o retorno dos dados
-        let result = await prisma.$executeRawUnsafe(sql)
+        let result = await prisma.$queryRawUnsafe(sql)
 
         if(result){
             return result
@@ -96,6 +97,7 @@ const selectAllVersao = async function () {
             return false
         }
     } catch (error) {
+        
         return false
     }
 }
@@ -107,7 +109,7 @@ const selectByIdVersao = async function (id) {
         let idVersao = id
         let sql = `select * from tbl_versao where id=${idVersao}`
 
-        let result = await prisma.$executeRawUnsafe(sql)
+        let result = await prisma.$queryRawUnsafe(sql)
 
         if(result){
             return result

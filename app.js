@@ -240,23 +240,17 @@ app.get('/v1/controle-jogos/versao/:id', cors(), async function (request, respon
 
 //EndPoint para deletar uma versão pelo ID
 app.delete('/v1/controle-jogos/versao/:id', cors(), bodyParserJson, async function (request, response) {
-    
-    //Recebe o contentType da requisição
-    let contentType = request.headers['content-type']
 
     //Recebe o ID da versão
     let idVersao = request.params.id
 
-    //Recebe os dados do jogo encaminhados do BODY
-    let dadosBody = request.body
-
-    let resultVersao = await controllerVersao.excluirVersao(dadosBody, idVersao, contentType)
+    let resultVersao = await controllerVersao.excluirVersao(idVersao)
 
     response.status(resultVersao.status_code)
     response.json(resultVersao)
 })
 
-//EndPoint para atualizar uma empresa pelo ID
+//EndPoint para atualizar uma  versao pelo ID
 app.put('/v1/controle-jogos/versao/:id', cors(), bodyParserJson, async function (request, response) {
     //Recebe o contentType para válidar o tipo de dados da requisição
     let contentType = request.headers['content-type']
@@ -319,17 +313,11 @@ app.get('/v1/controle-jogos/plataforma/:id', cors(), async function (request, re
 
 //EndPoint para deletar uma versão pelo ID
 app.delete('/v1/controle-jogos/plataforma/:id', cors(), bodyParserJson, async function (request, response) {
-    
-    //Recebe o contentType da requisição
-    let contentType = request.headers['content-type']
 
     //Recebe o ID da versão
     let idPlataforma = request.params.id
 
-    //Recebe os dados do jogo encaminhados do BODY
-    let dadosBody = request.body
-
-    let resultPlataforma = await controllerPlataforma.excluirPlataforma(dadosBody, idPlataforma, contentType)
+    let resultPlataforma = await controllerPlataforma.excluirPlataforma(idPlataforma)
 
     response.status(resultPlataforma.status_code)
     response.json(resultPlataforma)
@@ -402,16 +390,11 @@ app.get('/v1/controle-jogos/genero/:id', cors(), async function (request, respon
 //EndPoint para deletar uma versão pelo ID
 app.delete('/v1/controle-jogos/genero/:id', cors(), bodyParserJson, async function (request, response) {
     
-    //Recebe o contentType da requisição
-    let contentType = request.headers['content-type']
-
     //Recebe o ID da versão
     let idGenero = request.params.id
 
-    //Recebe os dados do jogo encaminhados do BODY
-    let dadosBody = request.body
 
-    let resultGenero = await controllerGenero.excluirGenero(dadosBody, idGenero, contentType)
+    let resultGenero = await controllerGenero.excluirGenero(idGenero)
 
     response.status(resultGenero.status_code)
     response.json(resultGenero)
