@@ -194,10 +194,6 @@ app.put('/v1/controle-jogos/empresa/:id', cors(), bodyParserJson, async function
     response.status(resultEmpresa.status_code)
     response.json(resultEmpresa)
 })
-console.log('API aguardando Requisições...')
-
-
-
 
 
 
