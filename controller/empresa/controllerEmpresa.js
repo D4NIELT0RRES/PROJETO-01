@@ -79,7 +79,7 @@ const atualizarEmpresa = async function (empresa, id, contentType) {
                 }else if(resultEmpresa.status_code == 404){
                     return MESSAGE.ERROR_NOT_FOUND //404
                 }else{
-                    return MESSAGE.ERROR_INTERNAL_SERVER_MODEL //500
+                    return MESSAGE.ERROR_INTERNAL_SERVER_CONTROLLER //500
                 }
             }
         }else{
@@ -91,31 +91,30 @@ const atualizarEmpresa = async function (empresa, id, contentType) {
 }
 
 //Função para deletar uma empresa
-const excluirEmpresa = async function (id) {
-    
+const excluirEmpresa = async function(id) {
     try{
-        if(id == undefined || id == '' || id == null || isNaN(id) || id <= 0){
-            return MESSAGE.ERROR_REQUIRED_FIELDS //400
+        if(id == ''|| id == undefined || id == null || id == isNaN(id) || id <= 0){
+            return MESSAGE.ERROR_REQUIRED_FIELDS
         }else{
             let resultEmpresa = await buscarEmpresa(parseInt(id))
 
-            if(resultJogo.status_code == 200){
-                //delete
+            if(resultEmpresa.status_code == 200){
+                // Código do delete
                 let result = await empresaDAO.deleteEmpresa(parseInt(id))
 
                 if(result){
-                    return MESSAGE.SUCCESS_DELETE_ITEM//200
+                    return MESSAGE.SUCCESS_DELETE_ITEM
                 }else{
-                    return MESSAGE.ERROR_INTERNAL_SERVER_MODEL//500
+                    return MESSAGE.ERROR_INTERNAL_SERVER_MODEL
                 }
             }else if(resultEmpresa.status_code == 404){
-                return MESSAGE.ERROR_NOT_FOUND//404
+                return MESSAGE.ERROR_NOT_FOUND
             }else{
-                return MESSAGE.ERROR_INTERNAL_SERVER_CONTROLLER//500
+                return MESSAGE.ERROR_INTERNAL_SERVER_CONTROLLER //500
             }
         }
     }catch(error){
-        return MESSAGE.ERROR_INTERNAL_SERVER_CONTROLLER//500
+        return MESSAGE.ERROR_INTERNAL_SERVER_CONTROLLER //500
     }
 }
 

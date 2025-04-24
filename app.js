@@ -167,17 +167,11 @@ app.get('/v1/controle-jogos/empresa/:id', cors(), async function (request, respo
 })
 
 //EndPoint para deletar uma empresa pelo ID
-app.delete('/v1/controle-jogos/empresa/:id', cors(), bodyParserJson, async function (request, response) {
-    //Recebe o contentType da requisição
-    let contentType = request.headers['content-type']
-
-    //Recebe o id da Empresa
+app.delete('/v1/controle-jogos/empresa/:id', cors(), async function(request,response){
+    // Recebendo o id da requisição
     let idEmpresa = request.params.id
 
-    //Recebe os dados do jogo encaminhados do BODY
-    let dadosBody = request.body
-
-    let resultEmpresa = await controllerEmpresa.excluirEmpresa(dadosBody,idEmpresa,contentType)
+    let resultEmpresa = await controllerEmpresa.excluirEmpresa(idEmpresa)
 
     response.status(resultEmpresa.status_code)
     response.json(resultEmpresa)
@@ -449,6 +443,6 @@ app.put('/v1/controle-jogos/genero/:id', cors(), bodyParserJson, async function 
 
 
 
-app.listen('8080', function(){
+app.listen('3030', function(){
     console.log('API aguardando Requisições...')
 })

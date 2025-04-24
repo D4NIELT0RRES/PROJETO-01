@@ -53,7 +53,8 @@ const updateEmpresa = async function (empresa) {
                                             tipo_de_empresa = '${empresa.tipo_de_empresa}',
                                             fundador        = '${empresa.fundador}',
                                             pais_origem     = '${empresa.pais_origem}',
-                                            foto_capa       = '${empresa.foto_capa}'`
+                                            foto_capa_empresa       = '${empresa.foto_capa_empresa}' 
+                                            where id = ${empresa.id}`
 
         //Executa o script SQL no BD e aguarda o retorno no BD
         let result = await prisma.$executeRawUnsafe(sql)
@@ -89,14 +90,11 @@ const deleteEmpresa = async function (id) {
 }
 
 //Função para retornar do Banco de Dados uma lista de empresas
-const selectAllEmpresa = async function () {
-    
+const selectAllEmpresa = async function(){
     try{
-        //Script SQL para retornar os dados do BD
         let sql = `select * from tbl_empresa`
 
-        //Executa o script SQL e aguarda o retorno dos dados
-        let result = await prisma.$executeRawUnsafe(sql)
+        let result = await prisma.$queryRawUnsafe(sql)
 
         if(result){
             return result
@@ -108,21 +106,19 @@ const selectAllEmpresa = async function () {
     }
 }
 
-//Função para buscar no Banco de Dados um jogo pelo ID
-const selectByIdEmpresa = async function (id) {
-    
+//Função para buscar no Banco de Dados uma empresa pelo ID
+const selectByIdEmpresa = async function(id){
     try{
         let idEmpresa = id
         let sql = `select * from tbl_empresa where id=${idEmpresa}`
 
-        let result = await prisma.$executeRawUnsafe(sql)
+        let result = await prisma.$queryRawUnsafe(sql)
 
         if(result){
             return result
         }else{
             return false
         }
-
     }catch(error){
         return false
     }
