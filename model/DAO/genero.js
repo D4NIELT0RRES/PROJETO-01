@@ -21,7 +21,7 @@ const insertGenero = async function (genero){
     
     try {
         
-        let sql = `insert into tbl_genero(tipo_de_categoria) value ('${genero.tipo_de_categoria}')`
+        let sql = `insert into tbl_genero(tipo_de_categoria) values ('${genero.tipo_de_categoria}')`
 
         //Executa o script SQL no BD e aguarda o retorno no BD
         let result = await prisma.$executeRawUnsafe(sql)
@@ -38,7 +38,7 @@ const insertGenero = async function (genero){
 //Função para atualizar no Banco de Dados um genero existente
 const updateGenero = async function (genero) {
      try {
-        let sql = `update tbl_genero set   nome='${genero.tipo_de_categoria}'`
+        let sql = `update tbl_genero set tipo_de_categoria nome='${genero.tipo_de_categoria}'`
 
         //Executa o script SQL no BD e aguarda o retorno no BD
         let result = await prisma.$executeRawUnsafe(sql)
@@ -109,6 +109,7 @@ const selectByIdGenero = async function (id) {
     } catch (error) {
         return false
     }
+    
 }
 
 module.exports ={
