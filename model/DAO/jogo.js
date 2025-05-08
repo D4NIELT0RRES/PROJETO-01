@@ -36,7 +36,8 @@ const insertJogo = async function(jogo){
                                             '${jogo.tamanho}',
                                             '${jogo.descricao}',
                                             '${jogo.foto_capa}',
-                                            '${jogo.link}'
+                                            '${jogo.link}',
+                                            '${jogo.id_faixa_etaria}'
                                         )`
         //Executa o script SQL no BD e aguarda o retorno no BD
         let result = await prisma.$executeRawUnsafe(sql)
@@ -61,7 +62,8 @@ const updateJogo = async function(jogo){
                                             tamanho = '${jogo.tamanho}',
                                             descricao = '${jogo.descricao}',
                                             foto_capa = '${jogo.foto_capa}',
-                                            link = '${jogo.link}'
+                                            link = '${jogo.link}',
+                                            id_faixa_etaria = '${jogo.id_faixa_etaria}'
                                             where id = ${jogo.id}`
 
         //Executa o script SQL no BD e aguarda o retorno no BD

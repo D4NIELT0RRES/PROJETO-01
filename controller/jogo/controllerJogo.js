@@ -12,6 +12,9 @@ const MESSAGE = require('../../modulo/config.js')
 const jogoDAO = require('../../model/DAO/jogo.js')
 const { deserializeRawResult } = require('@prisma/client/runtime/library')
 
+//Import das controllers para criar as relações com a faixa_etaria
+const controllerFaixaEtaria = require('../faixa_etaria/controllerFaixa_etaria.js')
+
 //Função para inserir um novo jogo
 const inserirJogo = async function(jogo,contentType){
 
@@ -24,7 +27,8 @@ const inserirJogo = async function(jogo,contentType){
                 jogo.tamanho         == undefined ||            jogo.tamanho.length   > 10  ||
                 jogo.descricao       == undefined ||
                 jogo.foto_capa       == undefined ||            jogo.foto_capa.length > 200 ||
-                jogo.link            == undefined ||            jogo.link.length      > 200
+                jogo.link            == undefined ||            jogo.link.length      > 200 ||
+                jogo.id_faixa_etaria == undefined ||            jogo.id_faixa_etaria == ''  
             ){
                 return MESSAGE.ERROR_REQUIRED_FIELDS //400
             }else{
@@ -47,7 +51,7 @@ const inserirJogo = async function(jogo,contentType){
 }
 
 //Função para atualizar um jogo
-const atualizarJogo = async function(jogo,id,contentType){
+const atualizarJogo = async function(jogo,id,id_faixa_etaria,contentType){
 
     try{
         if(contentType == 'application/json'){
@@ -59,12 +63,14 @@ const atualizarJogo = async function(jogo,id,contentType){
                 jogo.descricao       == undefined ||
                 jogo.foto_capa       == undefined ||            jogo.foto_capa.length > 200 ||
                 jogo.link            == undefined ||            jogo.link.length      > 200 ||
-                id                   == undefined ||            id == ''  || id == null || isNaN(id) || id<= 0
+                id                   == undefined ||            id == ''  || id == null || isNaN(id) || id<= 0 ||
+                jogo.id_faixa_etaria == undefined ||            id_faixa_etaria == '' || id_faixa_etaria == null || isNaN(id_faixa_etaria) || id_faixa_etaria <= 0
             ){
                 return MESSAGE.ERROR_REQUIRED_FIELDS //400
             }else{
                 //Validar se o ID existe no BD
                 let resultJogo = await buscarJogo(parseInt(id))
+                
                 if(resultJogo.status_code == 200){
                     //Update
                     //Adiciona um atributo id no JSON
@@ -136,7 +142,6 @@ const listarJogo = async function(){
                 dadosJogos.status = true
                 dadosJogos.status_code = 200
                 dadosJogos.items = resultJogo.length
-                dadosJogos.games = resultJogo
 
                 return dadosJogos//200
             }else{
