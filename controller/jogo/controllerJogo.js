@@ -14,7 +14,7 @@ const { deserializeRawResult } = require('@prisma/client/runtime/library')
 
 //Import das controllers para criar as relações com a faixa_etaria
 const controllerFaixaEtaria = require('../faixa_etaria/controllerFaixa_etaria.js')
-
+const controllerPlataforma = require('../plataforma/controllerPlataforma.js')
 //Função para inserir um novo jogo
 const inserirJogo = async function(jogo,contentType){
 
@@ -131,10 +131,15 @@ const excluirJogo = async function(id){
 const listarJogo = async function(){
 
     try{
+        //Objeto do tipo array para utilizar no foreach para carregar os dados 
+        //do filme e da classificacao
+        const arrayFaixaEtaria = []
 
         let dadosJogos = {}
+
         //Chama a função para retornar os dados do jogo
         let resultJogo = await jogoDAO.selectAllJogo()
+        
         if(resultJogo != false || typeof(resultJogo) == 'object'){
             if(resultJogo.length > 0){
 
@@ -142,6 +147,34 @@ const listarJogo = async function(){
                 dadosJogos.status = true
                 dadosJogos.status_code = 200
                 dadosJogos.items = resultJogo.length
+
+                //resultFilme.forEach(async function(itemFilme){
+                //foi necessário substituir o foreach pelo for of, pois
+                //o foreach não consegue trabalhar com requisições async e await
+                for(itemJogo of resultJogo){
+
+                /**** RETORNA OS DADOS DA CLASSIFICAÇÃO PARA COLOCAR NO RETORNO DO FILME *****/
+                //Busca os dados da classificação na controller de classificação
+                //Utilizando o ID da classificação (Chave estrangeira)    
+                let dadosFaixaEtaria = await controllerFaixaEtaria.buscarFaixaEtaria(itemJogo.id_faixa_etaria)
+
+                //Adiciona um atributo 'faixa etaria' no JSON de jogos
+                itemJogo.faixaEtaria = dadosFaixaEtaria.faixaEtaria
+
+                //Remove o atributo id_faixa_etaria do JSON de jogos, pois já temos
+                //o ID dentro dos dados da faixa etaria
+                delete itemJogo.id_faixa_etaria
+                //Adiciona o JSON do filme, agora com os dados da classificação em um array
+                /*********************** */
+
+                /**** RETORNA OS DADOS DO GENERO PARA COLOCAR NO RETORNO DO JOGO *****/
+                let dadosPlataforma = await controllerPlataforma.buscarPlataforma(itemJogo.id)
+                itemJogo.plataforma = dadosPlataforma
+                
+                arrayFaixaEtaria.push(itemJogo)
+                }
+                //Adiciona o novo array de JOGOS para retornar ao APP
+                dadosJogos.jogos = arrayFaixaEtaria
 
                 return dadosJogos//200
             }else{
@@ -163,6 +196,9 @@ const buscarJogo = async function(id){
 
     try{
 
+        let arrayJogos = []
+        let idJogo = id
+
         if(id == "" || id == undefined || id == null || isNaN(id) || id <= 0){
             return MESSAGE.ERROR_REQUIRED_FIELDS//400
         }else{
@@ -170,16 +206,21 @@ const buscarJogo = async function(id){
             let dadosJogos = {}
 
             //Chama a função para retornar os dados do jogo
-            let resultJogo = await jogoDAO.selectByIdJogo(parseInt(id))
-
+            let resultJogo = await jogoDAO.selectByIdJogo(parseInt(idJogo))
             if(resultJogo != false || typeof(resultJogo) == 'object'){
                 if(resultJogo.length > 0){
-
                     //Cria um objeto do tipo JSON para retornar a lista de jogos
                     dadosJogos.status = true
                     dadosJogos.status_code = 200
-                    dadosJogos.games = resultJogo
+                    for(itemJogo of resultJogo){
+                        let dadosFaixaEtaria = await controllerFaixaEtaria.buscarFaixaEtaria(itemJogo.id_faixa_etaria)
 
+                        itemJogo.faixaEtaria = dadosFaixaEtaria.faixaEtaria
+                        delete itemJogo.id_faixa_etaria
+
+                        arrayJogos.push(itemJogo)
+                    }
+                    dadosJogos.jogos = arrayJogos
                     return dadosJogos//200
                 }else{
                     return MESSAGE.ERROR_NOT_FOUND//404

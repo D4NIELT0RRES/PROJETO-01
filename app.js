@@ -39,6 +39,7 @@ const controllerEmpresa = require('./controller/empresa/controllerEmpresa.js')
 const controllerVersao = require('./controller/versao/controllerVersao.js')
 const controllerPlataforma = require('./controller/plataforma/controllerPlataforma.js')
 const controllerGenero = require('./controller/genero/controllerGenero.js')
+const controllerFaixaEtaria = require('./controller/faixa_etaria/controllerFaixa_etaria.js')
 
 //Estabelecendo o formato de dados que deverá chegar no body da aquisição (POST ou PUT)
 const bodyParserJson = bodyParser.json()
@@ -416,6 +417,61 @@ app.put('/v1/controle-jogos/genero/:id', cors(), bodyParserJson, async function 
 
     response.status(resultGenero.status_code)
     response.json(resultGenero)
+})
+
+
+
+
+////////////////////////// TBL_ FAIXA_ETARIA //////////////////////////
+
+//EndPoint para inserir uma faixa etaria no banco de dados
+app.post('/v1/controle-jogos/faixaEtaria', cors(), bodyParserJson, async function (request,response) {
+    
+    //Recebe o content-type para válidar o tipo de dados da requisição
+    let contentType = request.headers['content-type']
+
+    //Recebe o conteúdo do BODY da requisição
+    let dadosBody = request.body
+
+    //Encaminhando os dados do body da requisição para a controller inserir no banco de dados
+    let resultFaixaEtaria = await controllerFaixaEtaria.inserirFaixaEtaria(dadosBody,contentType)
+
+    response.status(resultFaixaEtaria.status_code)
+    response.json(resultFaixaEtaria)
+})
+
+//EndPoint para retornar uma lista de faixa etaria
+app.get('/v1/controle-jogos/faixaEtaria', cors(), async function (request,response) {
+    
+    //Chama a função para lista de faixa etaria
+    let resultFaixaEtaria = await controllerFaixaEtaria.listarFaixaEtaria()
+
+    response.status(resultFaixaEtaria.status_code)
+    response.json(resultFaixaEtaria)
+})
+
+//EndPoint para retornar uma faixa etaria pelo ID
+app.get('/v1/controle-jogos/faixaEtaria/:id', cors(), async function (request,response) {
+    
+    let idFaixaEtaria = request.params.id
+
+    //Chama a função para retornar uma faixa etaria pelo ID
+    let resultFaixaEtaria = await controllerFaixaEtaria.buscarFaixaEtaria(idFaixaEtaria)
+
+    response.status(resultFaixaEtaria.status_code)
+    response.json(resultFaixaEtaria)
+})
+
+//EndPoint para deletar uma faixa etaria pelo ID
+app.delete('/v1/controle-jogos/faixaEtaria/:id', cors(),bodyParserJson, async function (request,response) {
+    
+    //Recebe o ID da faixa etaria
+    let idFaixaEtaria = request.params.id
+
+    let resultFaixaEtaria = await controllerFaixaEtaria.excluirFaixaEtaria(idFaixaEtaria)
+
+    response.status(resultFaixaEtaria.status_code)
+    response.json(resultFaixaEtaria)
 })
 
 

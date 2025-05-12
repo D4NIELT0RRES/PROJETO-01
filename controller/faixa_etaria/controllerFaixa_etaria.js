@@ -149,3 +149,11 @@ const buscarFaixaEtaria = async function (id) {
         return MESSAGE.ERROR_INTERNAL_SERVER_CONTROLLER//500
     }
 }
+
+module.exports = {
+    inserirFaixaEtaria,
+    atualizarFaixaEtaria,
+    excluirFaixaEtaria,
+    listarFaixaEtaria,
+    buscarFaixaEtaria
+}
