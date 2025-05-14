@@ -27,9 +27,7 @@ const inserirJogo = async function(jogo,contentType){
                 jogo.tamanho         == undefined ||            jogo.tamanho.length   > 10  ||
                 jogo.descricao       == undefined ||
                 jogo.foto_capa       == undefined ||            jogo.foto_capa.length > 200 ||
-                jogo.link            == undefined ||            jogo.link.length      > 200 ||
-                jogo.id_faixa_etaria == undefined ||            jogo.id_faixa_etaria == ''  
-            ){
+                jogo.link            == undefined ||            jogo.link.length      > 200             ){
                 return MESSAGE.ERROR_REQUIRED_FIELDS //400
             }else{
                 //Encaminha os dados no novo jogo para ser inserido no banco de dados

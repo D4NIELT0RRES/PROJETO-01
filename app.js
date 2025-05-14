@@ -478,6 +478,6 @@ app.delete('/v1/controle-jogos/faixaEtaria/:id', cors(),bodyParserJson, async fu
 
 
 
-app.listen('3030', function(){
+app.listen('8080', function(){
     console.log('API aguardando Requisições...')
 })
